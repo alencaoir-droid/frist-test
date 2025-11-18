@@ -1,4 +1,4 @@
-name: run lint, test & deploy 
+name: mutiple jobs 
 on: push
 jobs:
   lint:
