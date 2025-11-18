@@ -11,7 +11,6 @@ jobs:
         with: 
           node-version: 18 
       - name: install dependencies 
-        echo: run lint 
         run: npm ci 
       - name: rund lint
         run: npm run lint 
