@@ -1,33 +1,42 @@
-name: echo-example
-
+name: run lint, test & deploy 
 on: push
-
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: checkout
+  lint:
+    runs-on: ubuntu-latest 
+    steps: 
+      - name: get code 
         uses: actions/checkout@v3
-
-      - name: echo github context
-        run: |
-          echo "Event: ${{ github.event_name }}"
-          echo "Repo: ${{ github.repository }}"
-          echo "User: ${{ github.actor }}"
-          echo "Commit SHA: ${{ github.sha }}"
-      
-      - name: set environment variable
-        run: echo "BUILD_ENV=production" >> $GITHUB_ENV
-
-      - name: echo env variable
-        run: |  
-        echo "Build environment: $BUILD_ENV"
-
-      - name: output value
-        id: output_step
-        run: echo "status=ok" >> $GITHUB_OUTPUT
-
-      - name: read output
-        run: |
-        echo "Status: ${{ steps.output_step.outputs.status }}"
+      - name: install nodejs 
+        uses: actions/setup-node@v3 
+        with: 
+          node-version: 18 
+      - name: install dependencies 
+        run: npm ci 
+      - name: rund lint
+        run: npm run lint 
+  test: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - name: get code 
+        uses: actions/checkout@v3
+      - name: install nodejs 
+        uses: actions/setup-node@v3 
+        with: 
+          node-version: 18 
+      - name: install dependencies 
+        run: npm ci 
+      - name: run tests 
+        run: npm test 
+  deploy: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - name: get code 
+        uses: actions/checkout@v3
+      - name: install nodejs 
+        uses: actions/setup-node@v3 
+        with: 
+          node-version: 18 
+      - name: install dependencies 
+        run: npm ci 
+      - name: create deploy 
+        run: npm run build 
